@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <stdbool.h>
+
+#include <gsl/gsl_rng.h>
+
+#include "quicksort/quicksort_lomuto.h"
+#include "quicksort/quicksort_hoare.h"
+
+int main(int argc, char **argv)
+{
+    gsl_rng * r = gsl_rng_alloc(gsl_rng_mt19937);
+    struct timespec begin, end;
+
+    bool debug = true;
+
+    int i = 0;
+    int iters = 1;
+    int N = 10;
+    for(int j = 0; j < iters; j++)
+    {
+        long unsigned int *A = malloc(sizeof(long unsigned int)*N);
+
+        for(i = 0; i < N; i++)
+        {
+            A[i] = gsl_rng_uniform_int(r, 100); // Limit the upper value of the RNG (debug)
+            //A[i] = gsl_rng_get(r);
+        };
+
+        if(debug)
+        {
+            printf("A = [");
+            for(int k = 0; k < N; k++)
+            {
+                printf("%lu ", A[i]);
+            }
+            printf("]\n");
+        }
+
+        clock_gettime(CLOCK_MONOTONIC_RAW, &begin);
+
+        quicksort_h(&A, 0, N-1, debug);
+
+        clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+        if(debug)
+        {
+            printf("A = [");
+            for(int k = 0; k < N; k++)
+            {
+                printf("%lu ", A[k]);
+            }
+            printf("]\n");
+        }
+
+        printf ("%d\t%e\n", N,
+            (end.tv_nsec - begin.tv_nsec) / 1000000000.0 +
+            (end.tv_sec  - begin.tv_sec));
+        free(A);
+
+        N *= 2;
+    }
+
+    gsl_rng_free(r);
+    return EXIT_SUCCESS;
+}
