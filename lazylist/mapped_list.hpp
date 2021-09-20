@@ -43,6 +43,7 @@ template <class T> void MappedList<T>::rewind()
     //printf("Getting a call for MappedList<T>->rewind()\n");
     LL->rewind();
     this->elem = this->startElemPtr;
+    *(this->elem)   = mapFunc(LL->getElem());
     //printf("Setting MappedList<T>->elem to %p\n", this->elem);
 }
 
