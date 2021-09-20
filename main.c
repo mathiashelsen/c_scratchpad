@@ -1,43 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <string.h>
 
-#include <gsl/gsl_rng.h>
-
-#include "quicksort/quicksort_lomuto.h"
+#include <openssl/md5.h>
 
 int main(int argc, char **argv)
 {
-    gsl_rng * r = gsl_rng_alloc(gsl_rng_mt19937);
-    struct timespec begin, end;
-
-    int i = 0;
-    int iters = 15;
-    int N = 128;
-    for(int j = 0; j < iters; j++)
+    if(argc != 2)
     {
-        long unsigned int *A = malloc(sizeof(long unsigned int)*N);
+        return EXIT_FAILURE;
+    }else{
+        char *inputString       = argv[1];
+        int  N                  = strlen(inputString);
 
-        for(i = 0; i < N; i++)
+        const unsigned char *d  = (const unsigned char *) inputString;
+        unsigned char md[16];
+
+        MD5(d, N, md);
+
+        printf("You have entered: %s, which has length %d.\n", inputString, N);
+        printf("The hash of this text is: ");
+        for(int i = 0; i < 16; i++)
         {
-            //A[i] = gsl_rng_uniform_int(r, 100); // Limit the upper value of the RNG (debug)
-            A[i] = gsl_rng_get(r);
-        };
-
-        clock_gettime(CLOCK_MONOTONIC_RAW, &begin);
-
-        quicksort_l(&A, 0, N-1);
-
-        clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-
-        printf ("%d %e\n", N,
-            (end.tv_nsec - begin.tv_nsec) / 1000000000.0 +
-            (end.tv_sec  - begin.tv_sec));
-        free(A);
-
-        N *= 2;
+            printf("%x", md[i]); 
+        }
+        printf("\n");
     }
 
-    gsl_rng_free(r);
     return EXIT_SUCCESS;
 }

@@ -9,8 +9,8 @@ void quicksort_l(unsigned long **A, int lo, int hi)
     {
         p = partition_l(A, lo, hi);
 
-        quicksort_l(A, lo, p-2);
-        quicksort_l(A, p,  hi );
+        quicksort_l(A, lo,  p-1);
+        quicksort_l(A, p+1, hi );
     }
 }
 
@@ -35,5 +35,5 @@ int partition_l(unsigned long **A, int lo, int hi)
         }
     }
 
-    return indexSmall;
+    return (indexSmall-1);
 }
