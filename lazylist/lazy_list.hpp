@@ -28,4 +28,18 @@ template <class T> void LazyList<T>::show()
     }
 };
 
+template <> void LazyList<int>::show()
+{
+    int* elemIterator = elem;
+    printf("[");
+    while(elemIterator)
+    {
+        printf("%d", *elemIterator);
+        elemIterator = nextFunc(elemIterator);
+        if(elemIterator)
+            printf(", ");
+    }
+    printf("]\n");
+}
+
 #endif
