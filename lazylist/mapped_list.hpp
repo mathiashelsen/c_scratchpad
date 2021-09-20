@@ -30,6 +30,12 @@ template <class T> void MappedList<T>::next()
     // Here is the difference between a basic LazyList and a MappedList:
     // we call the LazyList next, and then apply the map function.
     LL->next(); 
+
+    // Here we keep iterating as long at the base list is valid. However,
+    // it makes sense to check that the map function also returns valid
+    // values. For filter we should keep going until the baselist is exhausted,
+    // but for find/take we should keep stop when the return value goes false/true.
+    // This can be done by a FilteredList or TakenList class or similar.
     if(LL->getElem())
     {
         *(this->elem)   = mapFunc(LL->getElem());
