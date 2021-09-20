@@ -43,10 +43,10 @@ int multiplyByThree(int *p)
 
 int main(void)
 {
-   char * myStr = "Hello world!\n";
-     
-    LazyList<char> myCharList(&nextChar, &printChar, myStr);
-    myCharList.show();
+   //char * myStr = "Hello world!\n";
+   //  
+   // LazyList<char> myCharList(&nextChar, &printChar, myStr);
+   // myCharList.show();
 
     int startInt = 0;
 
@@ -54,7 +54,12 @@ int main(void)
 
     MappedList<int> myMappedList_b( &multiplyByThree, &myIntList_a );
     printf("Going to show list B\n");
-    myMappedList_b.show();
+    //myMappedList_b.show();
+    //myMappedList_b.rewind();
+
+    MappedList<int> myMappedList_c( &multiplyByThree, &myMappedList_b );
+    printf("Going to show list C\n");
+    myMappedList_c.show();;
 
     return EXIT_SUCCESS;
 }

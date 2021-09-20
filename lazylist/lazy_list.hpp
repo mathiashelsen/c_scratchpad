@@ -14,8 +14,9 @@ template <class T> class LazyList{
         LazyList();
         LazyList( T* (*_nextFunc)(T *), void (*_printFunc)(T *), T* _elem);
         virtual void    next();
-        T*      getElem();
-        void    show();
+        virtual void    rewind();
+        virtual T*      getElem();
+        void            show();
 };
 
 template <class T> LazyList<T>::LazyList()
@@ -32,6 +33,7 @@ template <class T> LazyList<T>::LazyList(T* (*_nextFunc)(T *), void (*_printFunc
     printFunc   = _printFunc;
     elem        = _elem;
     startElem   = _elem;
+    printf("Setting LazyList<T>->elem to %p\n", this->elem);
 };
 
 template <class T> void LazyList<T>::show()
@@ -43,6 +45,13 @@ template <class T> void LazyList<T>::show()
     }
 };
 
+template <class T> void LazyList<T>::rewind()
+{
+    printf("Getting a call for LazyList<T>->rewind()\n");
+    this->elem = this->startElem;
+    printf("Setting LazyList<T>->elem to %p\n", this->elem);
+};
+
 template <class T> T* LazyList<T>::getElem()
 {
     return elem;
@@ -50,7 +59,10 @@ template <class T> T* LazyList<T>::getElem()
 
 template <class T> void LazyList<T>::next()
 {
+    printf("Getting a call for LazyList<T>->next()\n");
+    printf("Going from pointer %p", elem);
     elem = nextFunc(elem);
+    printf(" to pointer %p\n", elem);
 }
 
 template <> void LazyList<int>::show()
