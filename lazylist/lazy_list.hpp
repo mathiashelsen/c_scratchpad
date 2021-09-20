@@ -8,7 +8,8 @@ template <class T> class LazyList{
         // Variables
         T*      (*nextFunc) (T *);
         void    (*printFunc)(T *);
-        T*      startElem;
+        T       startElem;
+        T*      startElemPtr;
 
         // Member functions
         LazyList();
@@ -21,19 +22,20 @@ template <class T> class LazyList{
 
 template <class T> LazyList<T>::LazyList()
 {
-    nextFunc    = NULL;
-    printFunc   = NULL;
-    elem        = NULL;
-    startElem   = NULL;
+    nextFunc        = NULL;
+    printFunc       = NULL;
+    elem            = NULL;
+    startElemPtr    = NULL;
 };
 
 template <class T> LazyList<T>::LazyList(T* (*_nextFunc)(T *), void (*_printFunc)(T *), T *_elem)
 {
-    nextFunc    = _nextFunc;
-    printFunc   = _printFunc;
-    elem        = _elem;
-    startElem   = _elem;
-    printf("Setting LazyList<T>->elem to %p\n", this->elem);
+    nextFunc        = _nextFunc;
+    printFunc       = _printFunc;
+    elem            = _elem;
+    startElem       = *elem;
+    startElemPtr    = elem;
+    //printf("Setting LazyList<T>->elem to %p\n", this->elem);
 };
 
 template <class T> void LazyList<T>::show()
@@ -47,9 +49,10 @@ template <class T> void LazyList<T>::show()
 
 template <class T> void LazyList<T>::rewind()
 {
-    printf("Getting a call for LazyList<T>->rewind()\n");
-    this->elem = this->startElem;
-    printf("Setting LazyList<T>->elem to %p\n", this->elem);
+    //printf("Getting a call for LazyList<T>->rewind()\n");
+    this->elem      = this->startElemPtr;
+    *(this->elem)   = this->startElem;
+    //printf("Setting LazyList<T>->elem to %p\n", this->elem);
 };
 
 template <class T> T* LazyList<T>::getElem()
@@ -59,10 +62,10 @@ template <class T> T* LazyList<T>::getElem()
 
 template <class T> void LazyList<T>::next()
 {
-    printf("Getting a call for LazyList<T>->next()\n");
-    printf("Going from pointer %p", elem);
+    //printf("Getting a call for LazyList<T>->next()\n");
+    //printf("Going from pointer %p", elem);
     elem = nextFunc(elem);
-    printf(" to pointer %p\n", elem);
+    //printf(" to pointer %p\n", elem);
 }
 
 template <> void LazyList<int>::show()

@@ -16,17 +16,17 @@ template <class T> class MappedList: public LazyList<T>
 
 template <class T> MappedList<T>::MappedList( T (_mapFunc)(T *), LazyList<T> *_LL )
 {
-    mapFunc         = _mapFunc;
-    LL              = _LL;
-    this->elem      = new T;
-    *(this->elem)   = mapFunc(LL->getElem());
-    this->startElem = this->elem;
-    printf("Setting MappedList<T>->elem to %p\n", this->elem);
+    mapFunc             = _mapFunc;
+    LL                  = _LL;
+    this->elem          = new T;
+    *(this->elem)       = mapFunc(LL->getElem());
+    this->startElemPtr  = this->elem;
+    //printf("Setting MappedList<T>->elem to %p\n", this->elem);
 }
 
 template <class T> void MappedList<T>::next()
 {
-    printf("Getting a call for MappedList<T>->next()\n");
+    //printf("Getting a call for MappedList<T>->next()\n");
     // Here is the difference between a basic LazyList and a MappedList:
     // we call the LazyList next, and then apply the map function.
     LL->next(); 
@@ -40,10 +40,10 @@ template <class T> void MappedList<T>::next()
 
 template <class T> void MappedList<T>::rewind()
 {
-    printf("Getting a call for MappedList<T>->rewind()\n");
+    //printf("Getting a call for MappedList<T>->rewind()\n");
     LL->rewind();
-    this->elem = this->startElem;
-    printf("Setting MappedList<T>->elem to %p\n", this->elem);
+    this->elem = this->startElemPtr;
+    //printf("Setting MappedList<T>->elem to %p\n", this->elem);
 }
 
 #endif

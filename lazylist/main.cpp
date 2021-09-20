@@ -60,6 +60,10 @@ int main(void)
     MappedList<int> myMappedList_c( &multiplyByThree, &myMappedList_b );
     printf("Going to show list C\n");
     myMappedList_c.show();;
+    myMappedList_c.rewind();
+    printf("Going to show list C\n");
+    myMappedList_c.show();;
+
 
     return EXIT_SUCCESS;
 }
