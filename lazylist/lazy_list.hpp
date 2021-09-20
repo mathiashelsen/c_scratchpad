@@ -2,13 +2,28 @@
 #define LAZY_LIST_HPP
 
 template <class T> class LazyList{
-    private:
-        T* (*nextFunc)(T *);
-        void (*printFunc)(T *);
-        T* elem;
+    protected:
+        T*      elem;
     public:
+        // Variables
+        T*      (*nextFunc) (T *);
+        void    (*printFunc)(T *);
+        T*      startElem;
+
+        // Member functions
+        LazyList();
         LazyList( T* (*_nextFunc)(T *), void (*_printFunc)(T *), T* _elem);
-        void show();
+        virtual void    next();
+        T*      getElem();
+        void    show();
+};
+
+template <class T> LazyList<T>::LazyList()
+{
+    nextFunc    = NULL;
+    printFunc   = NULL;
+    elem        = NULL;
+    startElem   = NULL;
 };
 
 template <class T> LazyList<T>::LazyList(T* (*_nextFunc)(T *), void (*_printFunc)(T *), T *_elem)
@@ -16,30 +31,40 @@ template <class T> LazyList<T>::LazyList(T* (*_nextFunc)(T *), void (*_printFunc
     nextFunc    = _nextFunc;
     printFunc   = _printFunc;
     elem        = _elem;
+    startElem   = _elem;
 };
 
 template <class T> void LazyList<T>::show()
 {
-    T* elemIterator = elem;
-    while(elemIterator)
+    while(elem)
     {
-        printFunc(elemIterator);
-        elemIterator = nextFunc(elemIterator);
+        printFunc(elem);
+        this->next();
     }
 };
 
+template <class T> T* LazyList<T>::getElem()
+{
+    return elem;
+}
+
+template <class T> void LazyList<T>::next()
+{
+    elem = nextFunc(elem);
+}
+
 template <> void LazyList<int>::show()
 {
-    int* elemIterator = elem;
     printf("[");
-    while(elemIterator)
+    while(elem)
     {
-        printf("%d", *elemIterator);
-        elemIterator = nextFunc(elemIterator);
-        if(elemIterator)
+        printf("%d", *elem);
+        this->next();
+        if(elem)
             printf(", ");
     }
     printf("]\n");
 }
+
 
 #endif
