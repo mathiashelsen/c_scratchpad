@@ -1,71 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "lazy_list.hpp"
-#include "mapped_list.hpp"
 
-void printChar(char * c)
+#include "List.hpp"
+#include "AllocatedList.hpp"
+#include "InfiniteList.hpp"
+#include "TransformedList.hpp"
+
+void incrementInt(int *p, void *args)
 {
-    printf("%c", *c);
+    *p += 1;
 }
 
-char * nextChar(char *c)
+int* takeFive(List<int>* L, int* elem, void *args)
 {
-    char *nc = c+1;
-    if(*nc == '\0')
+    int * intArgs = (int *) args;
+    int ctr = *intArgs;
+    if(ctr > 5)
         return NULL;
 
-    return nc;
-}
-
-// A list of ints that stops at 10
-int * nextInt(int *p)
-{
-    *p = *p + 1;
-    if(*p > 10)
-    {
-        return NULL;
-    }
-
-    return p;
-}
-
-// An infinite list
-int * nextInt_inf(int *p)
-{
-    *p = *p + 1;
-    return p;
-}
-
-int multiplyByThree(int *p)
-{
-   return (*p * 3);
+    (*intArgs) = ctr+1;
+    return L->next();
 }
 
 int main(void)
 {
-   char * myStr = "Hello world!\n";
-     
-    LazyList<char> myCharList(&nextChar, &printChar, myStr);
-    myCharList.show();
-    //myCharList.rewind();
-    //myCharList.show();
+    int myInts[10] = {0,1,2,3,4,5,6,7,8,9};
 
-    int startInt = 0;
+    AllocatedList myList_A = AllocatedList(myInts, 10);
+    myList_A.show();
+    myList_A.show();
 
-    LazyList<int> myIntList_a( &nextInt, NULL, &startInt);
+    int myInt = 0;
+    InfiniteList myList_B = InfiniteList(&incrementInt, NULL, &myInt);
+    //myList_B.show();
 
-    MappedList<int> myMappedList_b( &multiplyByThree, &myIntList_a );
-    printf("Going to show list B\n");
-    myMappedList_b.show();
-    myMappedList_b.rewind();
-
-    MappedList<int> myMappedList_c( &multiplyByThree, &myMappedList_b );
-    printf("Going to show list C\n");
-    myMappedList_c.show();;
-    myMappedList_c.rewind();
-    printf("Going to show list C\n");
-    myMappedList_c.show();;
-
+    int ctr = 0;
+    TransformedList myList_C = TransformedList(&myList_B, &takeFive, (void *)&ctr);
+    myList_C.show();
 
     return EXIT_SUCCESS;
 }
